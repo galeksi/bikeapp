@@ -1,0 +1,24 @@
+{
+  "name": "bikeapp",
+  "version": "1.0.0",
+  "description": "Application for public bikes in Helsinki",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/galeksi/bikeapp.git"
+  },
+  "author": "Aleksi Rendel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/galeksi/bikeapp/issues"
+  },
+  "homepage": "https://github.com/galeksi/bikeapp#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
