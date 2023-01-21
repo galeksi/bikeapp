@@ -9,20 +9,46 @@ const csv = require("fast-csv");
 const router = require("express").Router();
 const app = express();
 
+const mongoose = require("mongoose");
+const mongoUrl = process.env.MONGODB_URI;
+
+console.log("Connecting to database...");
+mongoose
+  .connect(mongoUrl)
+  .then(() => {
+    console.log("connected");
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
+
 const upload = multer({ dest: "tmp/csv/" });
+
+const validateStationData = (rows) => {
+  const dataRows = rows.slice(1, rows.length);
+  const stations = dataRows.filter((row, ind, arr) => {
+    return ind === arr.findIndex((e) => e[1] === row[1]);
+  });
+  // console.log(stations);
+  return stations;
+};
 
 router.post("/", upload.single("file"), (req, res) => {
   const fileRows = [];
-  console.log(req.file);
+  const validatedRows = [];
+  // console.log(req.file.path);
   csv
     .parseFile(req.file.path)
     .on("data", (data) => {
-      fileRows.push(data); // push each row
+      fileRows.push(data);
     })
     .on("end", () => {
-      console.log(fileRows); //contains array of arrays. Each inner array represents row of the csv file, with each element of it a column
-      fs.unlinkSync(req.file.path); // remove temp file
-      //process "fileRows" and respond
+      fs.unlinkSync(req.file.path);
+      const validatedStations = validateStationData(fileRows);
+      validatedRows.concat(validatedStations);
+      res.status(201).json({
+        "Valid stations": validatedStations.length,
+      });
     });
 });
 
