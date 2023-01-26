@@ -29,6 +29,7 @@ const typeDefs = gql`
   type Query {
     allStations(offset: Int, limit: Int): [Station!]!
     allTrips(offset: Int, limit: Int): [Trip!]!
+    latestTrips(limit: Int): [Trip!]!
   }
 `
 module.exports = typeDefs

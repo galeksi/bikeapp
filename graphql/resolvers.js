@@ -7,6 +7,8 @@ const resolvers = {
       Station.find({}).skip(args.offset).limit(args.limit),
     allTrips: async (root, args) =>
       Trip.find({}).skip(args.offset).limit(args.limit),
+    latestTrips: async (root, args) =>
+      Trip.find().sort({ departure: -1 }).limit(args.limit),
   },
   Trip: {
     departureStation: async (root) => {
