@@ -17,6 +17,15 @@ const typeDefs = gql`
     long: String
     lat: String
   }
+  type Statistics {
+    stationId: String
+    startTotal: Int
+    returnTotal: Int
+    startAvg: String
+    returnAvg: String
+    popularReturn: [String]
+    popularDeparture: [String]
+  }
   type Trip {
     id: ID!
     departure: String!
@@ -28,6 +37,8 @@ const typeDefs = gql`
   }
   type Query {
     allStations(offset: Int, limit: Int): [Station!]!
+    singleStation(id: String): Station!
+    stationStats(id: String): Statistics!
     allTrips(offset: Int, limit: Int): [Trip!]!
     latestTrips(limit: Int): [Trip!]!
   }
