@@ -10,6 +10,7 @@ require('dotenv').config()
 const dataRouter = require('./controllers/datauploads')
 const typeDefs = require('./graphql/typedefs')
 const resolvers = require('./graphql/resolvers')
+const stationsLoader = require('./graphql/loaders')
 
 const mongoose = require('mongoose')
 const mongoUrl = process.env.MONGODB_URI
@@ -30,7 +31,16 @@ const start = async () => {
 
   await server.start()
 
-  app.use('/', cors(), bodyParser.json(), expressMiddleware(server))
+  app.use(
+    '/',
+    cors(),
+    bodyParser.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => {
+        return { stationsLoader }
+      },
+    })
+  )
   app.use('/upload-csv', dataRouter)
 
   const PORT = process.env.PORT

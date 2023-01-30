@@ -1,6 +1,7 @@
 const Station = require('../models/station')
 const Trip = require('../models/trips')
 var _ = require('lodash')
+const stationsLoader = require('./loaders')
 
 const calculateAvg = (trips) => {
   const distance = trips.reduce((a, b) => a + b.distance, 0)
@@ -55,8 +56,9 @@ const resolvers = {
     },
   },
   Trip: {
-    departureStation: async (root) => {
-      const station = await Station.findOne({ _id: root.departureStation })
+    departureStation: async (root, args, context) => {
+      const station = await context.stationsLoader.load(root.departureStation)
+      console.log(station)
       return {
         id: station.id,
         nimi: station.nimi,
@@ -65,8 +67,8 @@ const resolvers = {
         kaupunki: station.kaupunki,
       }
     },
-    returnStation: async (root) => {
-      const station = await Station.findOne({ _id: root.returnStation })
+    returnStation: async (root, args, context) => {
+      const station = await context.stationsLoader.load(root.returnStation)
       return {
         id: station.id,
         nimi: station.nimi,
