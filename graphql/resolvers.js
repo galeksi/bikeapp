@@ -20,8 +20,21 @@ const resolvers = {
     allStations: async (root, args) =>
       Station.find({}).skip(args.offset).limit(args.limit),
     singleStation: async (root, args) => Station.findById(args.id),
-    allTrips: async (root, args) =>
-      Trip.find({}).skip(args.offset).limit(args.limit),
+    allTrips: async (root, args) => {
+      const params = {}
+      if (args.departure) params.departureStation = args.departure
+      if (args.return) params.returnStation = args.return
+      if (args.date) {
+        const dateMin = new Date(args.date)
+        const dateMax = new Date(dateMin.getTime() + 86400000)
+        params.departure = {
+          $gte: dateMin,
+          $lt: dateMax,
+        }
+      }
+
+      return Trip.find(params).sort({ departure: -1 }).limit(args.limit)
+    },
     latestTrips: async (root, args) =>
       Trip.find().sort({ departure: -1 }).limit(args.limit),
     stationStats: async (root, args) => {

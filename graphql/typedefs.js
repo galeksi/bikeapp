@@ -39,7 +39,12 @@ const typeDefs = gql`
     allStations(offset: Int, limit: Int): [Station!]!
     singleStation(id: String): Station!
     stationStats(id: String): Statistics!
-    allTrips(offset: Int, limit: Int): [Trip!]!
+    allTrips(
+      limit: Int
+      departure: String
+      return: String
+      date: String
+    ): [Trip!]!
     latestTrips(limit: Int): [Trip!]!
   }
 `
