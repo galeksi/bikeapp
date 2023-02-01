@@ -58,7 +58,7 @@ const resolvers = {
   Trip: {
     departureStation: async (root, args, context) => {
       const station = await context.stationsLoader.load(root.departureStation)
-      console.log(station)
+      // console.log(station)
       return {
         id: station.id,
         nimi: station.nimi,
