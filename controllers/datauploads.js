@@ -7,7 +7,9 @@ const fs = require('fs')
 const multer = require('multer')
 const upload = multer({ dest: 'tmp/csv/' })
 
+// Validates station row; only returns valid rows;
 const stationValidator = (obj) => {
+  // Empty fields are corrected for this dataset to have consistent database entries; this is no real validation
   if (obj.kaupunki === ' ') obj.kaupunki = 'Helsinki'
   if (obj.stad === ' ') obj.stad = 'Helsingfors'
   if (obj.operator === ' ') obj.operator = 'CityBike Finland'
@@ -16,15 +18,16 @@ const stationValidator = (obj) => {
 }
 
 const tripValidator = (obj, stations) => {
-  // console.log(stations)
+  // Distance and duration are validated
   if (obj.distance < 10 || obj.duration < 10) return null
+  // Trips from and to the repair shop or production are discarded
   if (obj.departureStation === '997' || obj.departureStation === '999') {
     return null
   }
   if (obj.returnStation === '997' || obj.returnStation === '999') {
     return null
   }
-
+  // Because departue and return stations are refrenced in database the fields are discarded
   delete obj.departureStationName
   delete obj.returnStationName
 
@@ -41,6 +44,7 @@ const tripValidator = (obj, stations) => {
   return obj
 }
 
+// fast-csv package is changed to a promise returning function to be called seperately and asynchrone
 const readCsv = (path, options, validator, validatorData) => {
   return new Promise((resolve, reject) => {
     const fileRows = []
@@ -62,10 +66,12 @@ const readCsv = (path, options, validator, validatorData) => {
   })
 }
 
+// REST Endpoint to upload trips csv file by postrequest
 dataRouter.post('/trips', upload.single('file'), async (req, res) => {
+  // Stations queried to be refrenced in trips departure and return
   const stations = await Station.find({})
-  // console.log(stations)
 
+  // Custom header to match mongoose schema for DB upload
   const tripHeader = [
     'departure',
     'return',
@@ -77,6 +83,7 @@ dataRouter.post('/trips', upload.single('file'), async (req, res) => {
     'duration',
   ]
 
+  // Data is uploaded to tmp/csv and validated rows with new headers returned as objects
   const data = await readCsv(
     req.file.path,
     {
@@ -89,6 +96,7 @@ dataRouter.post('/trips', upload.single('file'), async (req, res) => {
   console.log(data)
 
   await Trip.deleteMany({})
+  // Validated data is saved to the DB
   const savedTrips = await Trip.insertMany(data)
 
   if (savedTrips) {
@@ -102,6 +110,7 @@ dataRouter.post('/trips', upload.single('file'), async (req, res) => {
 })
 
 dataRouter.post('/stations', upload.single('file'), async (req, res) => {
+  // Custom header to match mongoose schema for DB upload
   const stationHeader = [
     'fid',
     'number',
@@ -118,6 +127,7 @@ dataRouter.post('/stations', upload.single('file'), async (req, res) => {
     'lat',
   ]
 
+  // Data is uploaded to tmp/csv and validated rows with new headers returned as objects
   const data = await readCsv(
     req.file.path,
     {
@@ -128,6 +138,7 @@ dataRouter.post('/stations', upload.single('file'), async (req, res) => {
   )
 
   await Station.deleteMany({})
+  // Validated data is saved to the DB
   const savedStations = await Station.insertMany(data)
 
   if (savedStations) {

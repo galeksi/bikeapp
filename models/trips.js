@@ -1,3 +1,4 @@
+// mongoose schema for biketrips; departure and return stations are refrenced
 const mongoose = require('mongoose')
 
 const tripSchema = new mongoose.Schema({
@@ -9,6 +10,7 @@ const tripSchema = new mongoose.Schema({
   duration: Number,
 })
 
+// Cleans, simplifies and parses returned query objects
 tripSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()

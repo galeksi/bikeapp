@@ -15,6 +15,7 @@ const stationsLoader = require('./graphql/loaders')
 const mongoose = require('mongoose')
 const mongoUrl = process.env.MONGODB_URI
 
+// Connects to MongoDB Database
 console.log('Connecting to database...')
 mongoose
   .connect(mongoUrl)
@@ -25,6 +26,7 @@ mongoose
     console.log(err.message)
   })
 
+// Creates express server, apollo gql server, adds middleware dataloader and starts server
 const start = async () => {
   const app = express()
   const server = new ApolloServer({ typeDefs, resolvers })

@@ -1,3 +1,4 @@
+// mongoose schema for bike stations
 const mongoose = require('mongoose')
 
 const stationSchema = new mongoose.Schema({
@@ -16,6 +17,7 @@ const stationSchema = new mongoose.Schema({
   lat: Number,
 })
 
+// Cleans, simplifies and parses returned query objects
 stationSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()

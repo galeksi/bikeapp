@@ -1,3 +1,4 @@
+// Definitions for Apollo Server queries
 const { gql } = require('graphql-tag')
 
 const typeDefs = gql`
