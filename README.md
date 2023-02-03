@@ -17,8 +17,11 @@ The application displays:
 ## Prerequisites:
 
 Application is written with Node verion v18.10.0. Same or later version should be installed.
+
 Frontend in sepparate repository: https://github.com/galeksi/bikeapp-frontend
+
 Variables in .env files:
+
 Backend: MONGODB_URI & PORT
 Frontend: REACT_APP_MAPS_API_KEY
 
@@ -52,7 +55,9 @@ Backend:
 - lodash: Nice toolset for arrays and collections
 - mongoose: For DB queries and Database schemas
 - multer: To upload csv file locally
-  Frontend:
+
+Frontend:
+
 - React: Obvious choice with Node Backend
 - Apollo client: Tho query Apollo server
 - Tailwind css: Nice and more flexible alternative to Bootstrap or MaterialUI
