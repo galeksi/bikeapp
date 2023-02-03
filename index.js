@@ -34,7 +34,7 @@ const start = async () => {
   await server.start()
 
   app.use(
-    '/',
+    '/graphql',
     cors(),
     bodyParser.json(),
     expressMiddleware(server, {
@@ -43,6 +43,7 @@ const start = async () => {
       },
     })
   )
+  app.use(express.static('build'))
   app.use('/upload-csv', dataRouter)
 
   const PORT = process.env.PORT
