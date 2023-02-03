@@ -1,4 +1,4 @@
-# bikeapp
+# SolitaDev BIKEAPP 2023
 
 Application for public bikes in Helsinki
 
@@ -22,9 +22,8 @@ Frontend in sepparate repository: https://github.com/galeksi/bikeapp-frontend
 
 Variables in .env files:
 
-Backend: MONGODB_URI & PORT
-
-Frontend: REACT_APP_MAPS_API_KEY
+- Backend: MONGODB_URI & PORT
+- Frontend: REACT_APP_MAPS_API_KEY
 
 ## Configurations:
 
