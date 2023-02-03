@@ -23,11 +23,13 @@ Frontend in sepparate repository: https://github.com/galeksi/bikeapp-frontend
 Variables in .env files:
 
 Backend: MONGODB_URI & PORT
+
 Frontend: REACT_APP_MAPS_API_KEY
 
 ## Configurations:
 
 Public production version:
+
 To run locally:
 
 - git clone backend and frontend repos
