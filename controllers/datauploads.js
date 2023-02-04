@@ -20,11 +20,14 @@ const stationValidator = (obj) => {
 const tripValidator = (obj, stations) => {
   // Distance and duration are validated
   if (obj.distance < 10 || obj.duration < 10) return null
-  // Trips from and to the repair shop or production are discarded
-  if (obj.departureStation === '997' || obj.departureStation === '999') {
+  // Trips from and to stations not in provided stationdata are discarded
+  if (obj.departureStation === '997' || obj.returnStation === '997') {
     return null
   }
-  if (obj.returnStation === '997' || obj.returnStation === '999') {
+  if (obj.departureStation === '999' || obj.returnStation === '999') {
+    return null
+  }
+  if (obj.departureStation === '754' || obj.returnStation === '754') {
     return null
   }
   // Because departue and return stations are refrenced in database the fields are discarded
@@ -93,9 +96,9 @@ dataRouter.post('/trips', upload.single('file'), async (req, res) => {
     tripValidator,
     stations
   )
-  console.log(data)
+  // console.log(data)
 
-  await Trip.deleteMany({})
+  // await Trip.deleteMany({})
   // Validated data is saved to the DB
   const savedTrips = await Trip.insertMany(data)
 
