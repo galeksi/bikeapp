@@ -151,4 +151,4 @@ dataRouter.post('/stations', upload.single('file'), async (req, res) => {
   }
 })
 
-module.exports = dataRouter
+module.exports = { dataRouter, readCsv, stationValidator, tripValidator }

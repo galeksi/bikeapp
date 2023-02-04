@@ -27,15 +27,16 @@ Variables in .env files:
 
 ## Configurations:
 
-Public production version:
+Public production version: https://bikeapp-aleksirendel.fly.dev/
 
 To run locally:
 
-- git clone backend and frontend repos
+- git clone backend
 - npm update to install all dependencies (alternatively yarn upgarde)
-- add and configure .env files locally
-- npm start for frontend
-- npm run dev for backend
+- add and configure .env file locally
+- npm run dev for backend -> Starts the application with priduction build frontend
+
+Of course one can also clone the frontend, npm update and npm start (Backend should be running)
 
 ## Tests:
 

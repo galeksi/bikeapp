@@ -7,13 +7,16 @@ const bodyParser = require('body-parser')
 
 require('dotenv').config()
 
-const dataRouter = require('./controllers/datauploads')
+const { dataRouter } = require('./controllers/datauploads')
 const typeDefs = require('./graphql/typedefs')
 const resolvers = require('./graphql/resolvers')
 const stationsLoader = require('./graphql/loaders')
 
 const mongoose = require('mongoose')
-const mongoUrl = process.env.MONGODB_URI
+const mongoUrl =
+  process.env.NODE_ENV === 'test'
+    ? process.env.TEST_MONGODB_URI
+    : process.env.MONGODB_URI
 
 // Connects to MongoDB Database
 console.log('Connecting to database...')

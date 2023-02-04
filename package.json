@@ -4,9 +4,9 @@
   "description": "Application for public bikes in Helsinki",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "build:ui": "rm -rf build && cd ../bikeapp-frontend && npm run build && cp -r build ../bikeapp",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
@@ -21,12 +21,15 @@
   },
   "homepage": "https://github.com/galeksi/bikeapp#readme",
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "jest": "^29.4.1",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "@apollo/server": "^4.3.1",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dataloader": "^2.1.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -36,5 +39,8 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.8.4",
     "multer": "^1.4.5-lts.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
