@@ -40,6 +40,20 @@ Of course one can also clone the frontend, npm update and npm start (Backend sho
 
 ## Tests:
 
+Unittests:
+
+Backend has tests for datauploads and validations in folder 'tests'. The tests rely on csv files in the subfolder 'csv'.
+
+-> Run tests with command 'npm test -- tests/dataupload_api.test.js'
+
+E2E tests:
+
+Frontend uses cypress for E2E tests. To use cypress the frontend and backend have to both run separately. Tests are in cypress/e2e/bikeapp.cy.js.
+
+-> Run tests with command 'npm run cypress:open'
+
+IMPORTANT: Running Linux on Windows Subsystem (WSL2) might need some further setup to open cypress. More info here: https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress
+
 ## Technology choices:
 
 Backend:
@@ -57,11 +71,19 @@ Backend:
 - lodash: Nice toolset for arrays and collections
 - mongoose: For DB queries and Database schemas
 - multer: To upload csv file locally
+- moment: To validate dates
+- is-valid-coordinates: To validate coordinates
 
 Frontend:
 
 - React: Obvious choice with Node Backend
 - Apollo client: Tho query Apollo server
 - Tailwind css: Nice and more flexible alternative to Bootstrap or MaterialUI
+- Cypress: For E2E Testing
 - Google maps api: To show stations and details on map
 - Several packages for filtering and viewing: react-datepicker, react-paginate, react-select
+
+## ToDo
+
+Unfortunately testing ist not complete. The dataupload API and the GraphQL API should be tested in addition to E2E tests. Due to problems with supertest and running the needed serverobject the tests are not written yet.
+The testfile dataupload_api.test.js exists already but the initial test fails.
