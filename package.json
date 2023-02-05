@@ -43,6 +43,7 @@
     "multer": "^1.4.5-lts.1"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "globalTeardown": "./tests/teardown.js"
   }
 }

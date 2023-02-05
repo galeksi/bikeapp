@@ -37,6 +37,7 @@ const tripValidator = (obj, stations) => {
   if (!moment(obj.departure).isValid() || !moment(obj.return).isValid())
     return null
 
+  // Trips with return date before departure are discarded
   if (Date.parse(obj.departure) - Date.parse(obj.return) >= 0) return null
 
   // Because departue and return stations are refrenced in database the fields are discarded
@@ -149,7 +150,7 @@ dataRouter.post('/stations', upload.single('file'), async (req, res) => {
     stationValidator
   )
 
-  await Station.deleteMany({})
+  // await Station.deleteMany({})
   // Validated data is saved to the DB
   const savedStations = await Station.insertMany(data)
 
