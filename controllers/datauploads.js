@@ -6,30 +6,39 @@ const csv = require('fast-csv')
 const fs = require('fs')
 const multer = require('multer')
 const upload = multer({ dest: 'tmp/csv/' })
+const isValidCoordinates = require('is-valid-coordinates')
+const moment = require('moment')
+
+require('dotenv').config()
 
 // Validates station row; only returns valid rows;
 const stationValidator = (obj) => {
-  // Empty fields are corrected for this dataset to have consistent database entries; this is no real validation
+  // Empty fields are corrected for this dataset to have consistent database entries
   if (obj.kaupunki === ' ') obj.kaupunki = 'Helsinki'
   if (obj.stad === ' ') obj.stad = 'Helsingfors'
   if (obj.operator === ' ') obj.operator = 'CityBike Finland'
-  // console.log(obj)
+
+  // Station number and coordinates are validated
+  if (isNaN(Number(obj.number)) || Number(obj.number) <= 0) return null
+  if (!isValidCoordinates(Number(obj.long), Number(obj.lat))) return null
+
   return obj
 }
 
 const tripValidator = (obj, stations) => {
   // Distance and duration are validated
   if (obj.distance < 10 || obj.duration < 10) return null
-  // Trips from and to stations not in provided stationdata are discarded
-  if (obj.departureStation === '997' || obj.returnStation === '997') {
+
+  // Trips from and to stations not in stationdata from DB are discarded
+  if (!stations.find((s) => s.number === obj.departureStation)) return null
+  if (!stations.find((s) => s.number === obj.returnStation)) return null
+
+  // Trips with unvalid date strings are discarded
+  if (!moment(obj.departure).isValid() || !moment(obj.return).isValid())
     return null
-  }
-  if (obj.departureStation === '999' || obj.returnStation === '999') {
-    return null
-  }
-  if (obj.departureStation === '754' || obj.returnStation === '754') {
-    return null
-  }
+
+  if (Date.parse(obj.departure) - Date.parse(obj.return) >= 0) return null
+
   // Because departue and return stations are refrenced in database the fields are discarded
   delete obj.departureStationName
   delete obj.returnStationName
@@ -63,7 +72,7 @@ const readCsv = (path, options, validator, validatorData) => {
         if (validData) fileRows.push(validData)
       })
       .on('end', () => {
-        fs.unlinkSync(path)
+        if (process.env.NODE_ENV === !'test') fs.unlinkSync(path)
         resolve(fileRows)
       })
   })
